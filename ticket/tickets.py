@@ -80,12 +80,17 @@ def cli():
     from_station = stations.get(arguments['<from>'])
     to_station = stations.get(arguments['<to>'])
     date = arguments['<date>']
+    # print(arguments)
     # 构建URL
     url = 'https://kyfw.12306.cn/otn/lcxxcx/query?purpose_codes=ADULT&queryDate={}&from_station={}&to_station={}'.format(
         date, from_station, to_station
     )
+    if from_station or to_station:
+        print('未找到站点名！')
+        return;
     r = requests.get(url, verify=False)
-    logging.info(r)
+    # logging.info(r)
+    print(r.json())
     rows = r.json()['data']['datas']
     trains = TrainCollection(rows)
     trains.pretty_print()
